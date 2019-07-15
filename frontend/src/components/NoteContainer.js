@@ -120,6 +120,7 @@ class NoteContainer extends Component {
             return res
           })
           .then(this.getCall())
+          // .then(this.setState: notes: newNotes)
           .catch(err => console.log(err))
   };
 
@@ -130,8 +131,14 @@ class NoteContainer extends Component {
     })
       .then(res => res.json())
       .then(res => console.log(res))
-      .then(this.getCall())
+      .then(this.deleteFilter(id))
       .catch(err => console.log(err));
+  };
+
+  deleteFilter = id => {
+    let filteredResults = this.state.notes.slice();
+    let finalAr = filteredResults.filter(note => note.id !== id);
+    this.setState({ notes: finalAr });
   };
 
   render() {
