@@ -14,24 +14,15 @@ class NoteContainer extends Component {
   };
 
   componentDidMount() {
-    this.getCall();
-  }
-
-  getCall = () => {
-    console.log("getCall fires");
     fetch("http://localhost:3000/api/v1/notes")
       .then(res => res.json())
-      // .then(res => {
-      //   console.log(res);
-      //   return res;
-      // })
       .then(res =>
         this.setState({ notes: res }, () =>
           console.log(this.state.notes.length)
         )
       )
       .catch(err => console.log(err));
-  };
+  }
 
   handleViewNoteClick = noteId => {
     let newNotes = this.state.notes.slice();
@@ -56,39 +47,31 @@ class NoteContainer extends Component {
     });
   };
 
-  handleFilterInputChange = e => {
-    this.setState({ filterInputValue: e.target.value });
-  };
-
-  handleFilterSelectChange = e => {
-    this.setState({ filterSelectValue: e.target.value });
+  handleInputChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   handleEditSubmit = e => {
     e.preventDefault();
     //prettier-ignore
-    fetch(
-      `http://localhost:3000/api/v1/notes/${this.state.chosenNote.id}`,{
-        "method": "PATCH",
-        "headers": {
+    fetch(`http://localhost:3000/api/v1/notes/${this.state.chosenNote.id}`, {
+      method: "PATCH",
+      headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-        body: JSON.stringify({
-          title: this.state.chosenNote.title,
-          body: this.state.chosenNote.body
-        })
+      body: JSON.stringify({
+        title: this.state.chosenNote.title,
+        body: this.state.chosenNote.body
       })
-        .then(res => res.json())
-        .then(res=> {
-          console.log(res)
-          return res
-        })
-        .then(res=>this.handleEdit(res))
-        // .then(res=> this.setState(prevState=>({
-        //   notes: prevState.notes.map(note=> note.id === res.id)
-        // })))
-        .catch(err => console.log(err))
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        return res;
+      })
+      .then(res => this.handleEdit(res))
+      .catch(err => console.log(err));
   };
 
   handleEdit = res => {
@@ -102,25 +85,25 @@ class NoteContainer extends Component {
   };
 
   handleNewSubmit = e => {
-    console.log("handleNewSubmit fires");
     e.preventDefault();
     //prettier-ignore
-    fetch(
-        'http://localhost:3000/api/v1/notes',{
-          "method": "POST",
-          "headers": {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-          body: JSON.stringify({
-            title: "Lorem Ipsum",
-            body: "Fluctuat nec mergitur",
-            user_id:1
-          })
-        })
-          .then(res => res.json())
-          .then(res=> this.setState(prevState=>({ notes: [...prevState.notes, res]})))
-          .catch(err => console.log(err))
+    fetch("http://localhost:3000/api/v1/notes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        title: "Lorem Ipsum",
+        body: "Fluctuat nec mergitur",
+        user_id: 1
+      })
+    })
+      .then(res => res.json())
+      .then(res =>
+        this.setState(prevState => ({ notes: [...prevState.notes, res] }))
+      )
+      .catch(err => console.log(err));
   };
 
   handleDeleteSubmit = id => {
@@ -149,14 +132,12 @@ class NoteContainer extends Component {
     return (
       <Fragment>
         <Search
-          handleFilterInputChange={this.handleFilterInputChange}
-          handleFilterSelectChange={this.handleFilterSelectChange}
+          handleInputChange={this.handleInputChange}
           filterInputValue={this.state.filterInputValue}
           filterSelectValue={this.state.filterSelectValue}
         />
         <div className="container">
           <Sidebar
-            // notes={this.state.notes}
             notes={finalAr}
             handleViewNoteClick={this.handleViewNoteClick}
             handleNewSubmit={this.handleNewSubmit}

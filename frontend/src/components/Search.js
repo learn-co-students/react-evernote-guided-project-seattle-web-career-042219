@@ -6,21 +6,17 @@ const Search = props => {
       <input
         id="search-bar"
         type="text"
+        name="filterInputValue"
         placeholder="Search Notes"
         value={props.filterInputValue}
-        onChange={props.handleFilterInputChange}
+        onChange={props.handleInputChange}
       />
       <select
         id="select"
+        name="filterSelectValue"
         value={props.filterSelectValue}
-        onChange={props.handleFilterSelectChange}
+        onChange={props.handleInputChange}
       >
-        {/* <option name="created_at" value="dateCreated">
-          Date Created
-        </option>
-        <option name="updated_at" value="dateEdited">
-          Date Edited
-        </option> */}
         <option name="title" value="title" defaultValue>
           Title
         </option>
