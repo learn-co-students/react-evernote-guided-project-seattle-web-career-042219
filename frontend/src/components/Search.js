@@ -21,7 +21,7 @@ const Search = props => {
         <option name="updated_at" value="dateEdited">
           Date Edited
         </option> */}
-        <option name="title" value="title" selected="selected">
+        <option name="title" value="title" defaultValue>
           Title
         </option>
         <option name="body" value="body">

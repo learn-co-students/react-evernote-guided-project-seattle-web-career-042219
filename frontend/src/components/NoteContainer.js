@@ -57,25 +57,12 @@ class NoteContainer extends Component {
   };
 
   handleFilterInputChange = e => {
-    console.log("handleFilterChange fires");
     this.setState({ filterInputValue: e.target.value });
   };
 
   handleFilterSelectChange = e => {
-    console.log("handleFilterSelectChange fires");
     this.setState({ filterSelectValue: e.target.value });
   };
-
-  // filter = () => {
-  //   console.log("this.state.filterInputValue=", this.state.filterInputValue);
-  //   console.log("this.state.filterSelectValue=", this.state.filterSelectValue);
-  //   let filteredResults = this.state.notes.slice();
-  //   let finalAr = filteredResults.filter(note =>
-  //     note[this.state.filterSelectValue]
-  //       .toLowerCase()
-  //       .includes(this.state.filterInputValue.toLowerCase())
-  //   );
-  // };
 
   handleEditSubmit = e => {
     e.preventDefault();
@@ -93,8 +80,25 @@ class NoteContainer extends Component {
         })
       })
         .then(res => res.json())
-        .then(this.getCall())
+        .then(res=> {
+          console.log(res)
+          return res
+        })
+        .then(res=>this.handleEdit(res))
+        // .then(res=> this.setState(prevState=>({
+        //   notes: prevState.notes.map(note=> note.id === res.id)
+        // })))
         .catch(err => console.log(err))
+  };
+
+  handleEdit = res => {
+    let newArray = this.state.notes.slice();
+    let index = null;
+    for (let i = 0; i < newArray.length; i++) {
+      if (newArray[i].id === res.id) index = i;
+    }
+    newArray[index] = res;
+    this.setState({ notes: newArray });
   };
 
   handleNewSubmit = e => {
@@ -115,34 +119,24 @@ class NoteContainer extends Component {
           })
         })
           .then(res => res.json())
-          .then(res=> {
-            console.log(res)
-            return res
-          })
-          .then(this.getCall())
-          // .then(this.setState: notes: newNotes)
+          .then(res=> this.setState(prevState=>({ notes: [...prevState.notes, res]})))
           .catch(err => console.log(err))
   };
 
   handleDeleteSubmit = id => {
-    console.log("handleDeleteSubmit fires");
     fetch(`http://localhost:3000/api/v1/notes/${id}`, {
       method: "DELETE"
     })
       .then(res => res.json())
-      .then(res => console.log(res))
-      .then(this.deleteFilter(id))
+      .then(
+        this.setState(prevState => ({
+          notes: prevState.notes.filter(note => note.id !== id)
+        }))
+      )
       .catch(err => console.log(err));
   };
 
-  deleteFilter = id => {
-    let filteredResults = this.state.notes.slice();
-    let finalAr = filteredResults.filter(note => note.id !== id);
-    this.setState({ notes: finalAr });
-  };
-
   render() {
-    console.log("render fires");
     let filteredResults = this.state.notes.slice();
     let finalAr;
     this.state.filterInputValue && this.state.filterSelectValue
