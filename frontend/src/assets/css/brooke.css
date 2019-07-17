@@ -188,3 +188,7 @@ button:focus,
 input[type="submit"]:focus {
   outline: none;
 }
+
+.label {
+  padding: 0px 100px;
+}
