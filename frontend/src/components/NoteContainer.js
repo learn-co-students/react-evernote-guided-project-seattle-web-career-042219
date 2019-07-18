@@ -62,10 +62,6 @@ class NoteContainer extends Component {
       })
     })
       .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        return res;
-      })
       .then(res => this.handleEditHelper(res))
       .catch(err => console.log(err));
   };
