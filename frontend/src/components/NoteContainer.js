@@ -16,11 +16,7 @@ class NoteContainer extends Component {
   componentDidMount() {
     fetch("http://localhost:3000/api/v1/notes")
       .then(res => res.json())
-      .then(res =>
-        this.setState({ notes: res }, () =>
-          console.log(this.state.notes.length)
-        )
-      )
+      .then(res => this.setState({ notes: res }))
       .catch(err => console.log(err));
   }
 
@@ -70,18 +66,16 @@ class NoteContainer extends Component {
         console.log(res);
         return res;
       })
-      .then(res => this.handleEdit(res))
+      .then(res => this.handleEditHelper(res))
       .catch(err => console.log(err));
   };
 
-  handleEdit = res => {
+  handleEditHelper = res => {
     let newArray = this.state.notes.slice();
-    let index = null;
-    for (let i = 0; i < newArray.length; i++) {
-      if (newArray[i].id === res.id) index = i;
-    }
-    newArray[index] = res;
-    this.setState({ notes: newArray });
+    let finalArray = newArray.map(note => {
+      return note.id === res.id ? (note = res) : note;
+    });
+    this.setState({ notes: finalArray });
   };
 
   handleNewSubmit = e => {
