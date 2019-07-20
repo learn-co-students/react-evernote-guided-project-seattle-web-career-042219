@@ -67,11 +67,11 @@ class NoteContainer extends Component {
   };
 
   handleEditHelper = res => {
-    let newArray = this.state.notes.slice();
-    let finalArray = newArray.map(note => {
-      return note.id === res.id ? (note = res) : note;
+    this.setState({
+      notes: this.state.notes.map(note =>
+        note.id === res.id ? (note = res) : note
+      )
     });
-    this.setState({ notes: finalArray });
   };
 
   handleNewSubmit = e => {
@@ -126,6 +126,7 @@ class NoteContainer extends Component {
           filterInputValue={this.state.filterInputValue}
           filterSelectValue={this.state.filterSelectValue}
         />
+        `
         <div className="container">
           <Sidebar
             notes={finalAr}
