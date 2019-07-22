@@ -31,7 +31,7 @@ class NoteContainer extends Component {
   };
 
   handleEditNoteClick = () => {
-    this.setState({ editANote: true });
+    this.setState({ editANote: true, viewANote: false });
   };
 
   handleEditFormChange = e => {
@@ -62,17 +62,23 @@ class NoteContainer extends Component {
       })
     })
       .then(res => res.json())
-      .then(res => this.handleEditHelper(res))
+      .then(res =>
+        this.setState({
+          notes: this.state.notes.map(note =>
+            note.id === res.id ? (note = res) : note
+          )
+        })
+      )
       .catch(err => console.log(err));
   };
 
-  handleEditHelper = res => {
-    this.setState({
-      notes: this.state.notes.map(note =>
-        note.id === res.id ? (note = res) : note
-      )
-    });
-  };
+  // handleEditHelper = res => {
+  //   this.setState({
+  //     notes: this.state.notes.map(note =>
+  //       note.id === res.id ? (note = res) : note
+  //     )
+  //   });
+  // };
 
   handleNewSubmit = e => {
     e.preventDefault();
@@ -97,15 +103,20 @@ class NoteContainer extends Component {
   };
 
   handleDeleteSubmit = id => {
+    //prettier-ignore
     fetch(`http://localhost:3000/api/v1/notes/${id}`, {
       method: "DELETE"
     })
       .then(res => res.json())
       .then(
-        this.setState(prevState => ({
-          notes: prevState.notes.filter(note => note.id !== id)
-        }))
-      )
+        this.setState(
+          prevState => ({
+            // ?????
+              viewANote: false,
+              editANote: false,
+              chosenNote: "",
+              notes: prevState.notes.filter(note => note.id !== id)
+            })))
       .catch(err => console.log(err));
   };
 
