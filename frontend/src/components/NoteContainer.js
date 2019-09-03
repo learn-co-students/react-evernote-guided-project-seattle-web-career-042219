@@ -109,14 +109,14 @@ class NoteContainer extends Component {
     })
       .then(res => res.json())
       .then(
-        this.setState(
-          prevState => ({
-            // ?????
+        this.setState(prevState => {
+          return {
               viewANote: false,
               editANote: false,
               chosenNote: "",
               notes: prevState.notes.filter(note => note.id !== id)
-            })))
+            }
+          }))
       .catch(err => console.log(err));
   };
 
