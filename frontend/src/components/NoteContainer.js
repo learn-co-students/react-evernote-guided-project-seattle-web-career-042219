@@ -72,14 +72,6 @@ class NoteContainer extends Component {
       .catch(err => console.log(err));
   };
 
-  // handleEditHelper = res => {
-  //   this.setState({
-  //     notes: this.state.notes.map(note =>
-  //       note.id === res.id ? (note = res) : note
-  //     )
-  //   });
-  // };
-
   handleNewSubmit = e => {
     e.preventDefault();
     //prettier-ignore
@@ -137,7 +129,6 @@ class NoteContainer extends Component {
           filterInputValue={this.state.filterInputValue}
           filterSelectValue={this.state.filterSelectValue}
         />
-        `
         <div className="container">
           <Sidebar
             notes={finalAr}
